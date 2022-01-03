@@ -13,3 +13,10 @@ file
 def inside_function():
     ...
 ```
+
+process
+```python
+@on_progress_changed(time=2)
+def inside_function(status: str, items: list):
+    ...
+```
