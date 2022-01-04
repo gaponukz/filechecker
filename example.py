@@ -1,8 +1,4 @@
-from filechecker import (
-    on_directory_changed,
-    on_file_changed,
-    on_progress_changed
-)
+from filechecker import *
 
 @on_file_changed(filename="test.txt")
 def inside_function():
@@ -27,3 +23,7 @@ def inside_function(status: str, items: list):
             print(f"Oh on, process {items} was deleted")
         case 'REPLACE':
             print("You have problems...")
+
+@on_gpu_temperature_reached(goal=65, time=5)
+def inside_function():
+    print("You need to cool down")
