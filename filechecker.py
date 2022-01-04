@@ -1,6 +1,8 @@
 import os
 import time
+
 import psutil
+import GPUtil
 
 from typing import Callable
 
@@ -21,6 +23,10 @@ def _get_processes() -> list:
             pass
     
     return all_processes
+
+def _get_gpu_temperature() -> float:
+    ''' GPU status from NVIDA GPUs '''
+    return GPUtil.getGPUs()[0].temperature
 
 def on_directory_changed(**kwargs: dict):
     def warpper(function: Callable):
@@ -76,5 +82,20 @@ def on_progress_changed(**kwargs: dict):
             current_processes = new
 
             time.sleep(kwargs.get('time', 1))
+    
+    return warpper
+
+def on_gpu_temperature_reached(**kwargs: dict):
+    def warpper(function: Callable):
+        ''' function() '''
+        if not (goal := kwargs.get('goal')):
+            raise ValueError("goal(mark to be reached) must be specified")
+
+        while True:
+            if _get_gpu_temperature() >= goal:
+                function()
+                return
+
+            time.sleep(kwargs.get('time', 1))    
     
     return warpper
