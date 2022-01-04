@@ -20,3 +20,9 @@ process
 def inside_function(status: str, items: list):
     ...
 ```
+gpu
+```python
+@on_gpu_temperature_reached(goal=65, time=5)
+def inside_function():
+    ...
+```
